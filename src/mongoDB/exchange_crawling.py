@@ -1,8 +1,6 @@
 import time
-import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
-
 import warnings
 warnings.filterwarnings("ignore")
 exchange_countries = ['AUD(호주)', 'BHD(바레인)', 'BRL(브라질)', 'BND(브루나이)', 'KHR(캄보디아(100))', 'CAD(캐나다)', 'HKD(홍콩)',
@@ -65,19 +63,17 @@ class exchange():
         try:
             table = self.driver.find_element_by_xpath('//*[@id="fxprint"]/table/tbody') # 테이블 접근
             rows = table.find_elements_by_tag_name("tr") # 테이블의 각 행에 접근
-            deno = len(rows)
         
             data_list = []
             for i, tr in enumerate(rows):
-                if int(i/deno) == float(i/deno):
-                    print(int(i/deno), '% 진행됐음둥')
                 td = tr.find_elements_by_tag_name("td") # td 전체 찾기
                 data = {'date' : td[0].text.replace('.', '-') , 'buy' : td[3].text.replace(',',''), 'standard' : td[6].text.replace(',','')}
                 data_list.append(data)
-
+            self.driver.close()  #탭 닫기
+            self.driver.switch_to.window(self.driver.window_handles[0])  #다시 이전 창(탭)으로 이동
+            
             return data_list
+        
         except:print('해당 날짜가 존재하지 않음둥')
 
-if __name__ == "__main__":
-    ex = exchange()
-    ex.all_countries()
+

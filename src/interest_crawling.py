@@ -30,6 +30,9 @@ investing_countries_2Y = [None, None, None, None, None, None, None,
                 None, None, None, None, None, None, 'south-africa',
                 None, None, 'taiwan', None, None, None, None, None, None, 'south-korea']
 
+imf_REF_AREA = ['AU', 'BH', 'BR', 'BN', 'KH', 'CA', 'HK', 'CN', 'CZ', 'DK', 'U2', 'FJ', 'HU', 'IN', 'ID', 'IL', 'JP', 'JO', 'KW', 'MY',
+                'MX', 'NZ', 'NO', 'PH', 'PL', 'RU', 'SA', 'SG', 'ZA', 'SE', 'CH', 'TW', 'TH', 'TR', 'AE', 'GB', 'US', 'VN', 'KR']
+
 date_storage = sorted(glob.glob('./../data/exchange/*.csv'))  # 환율 데이터 경로(날짜 가져오기)
 warnings.filterwarnings("ignore") # 경고문 제거
 driver = webdriver.Chrome('/Users/yuseonjong/chromedriver') # 드라이버 위치
