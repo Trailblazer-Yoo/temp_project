@@ -14,7 +14,7 @@ class DBconnect():
         self.db_ex = self.client['exchange']
         print('현재 존재하는 DB의 Collection 목록 : ', self.db_ex.list_collection_names().sort())
         
-    def exchange_data(self):        
+    def exchange_data(self): # 환율 데이터
         df = []
         for country in country_name:
             coll = self.db_ex[country]

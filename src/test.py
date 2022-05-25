@@ -14,6 +14,13 @@ url = 'http://dataservices.imf.org/REST/SDMX_JSON.svc/'
 key = 'CompactData/IFS/M.KR.RAXGFX_USD' # adjust codes here
 r = requests.get(f'{url}{key}').json()
 imf_dict = r['CompactData']['DataSet']['Series']['Obs']
+
+def rename_dict_key(dict_data, rename_list):
+    dict_data = pd.DataFrame(dict_data)
+    dict_data.columns = rename_list
+    
+    return dict_data.to_dict('record')
+
 imf_df = pd.DataFrame(imf_dict)
 imf_df.columns = ['date', 'inflation']
 imf_dict = imf_df.to_dict('record')
