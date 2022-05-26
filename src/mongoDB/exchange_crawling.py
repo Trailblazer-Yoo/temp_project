@@ -72,9 +72,7 @@ class exchange():
                 data_list.append(data)
             driver.quit()
             
-            return data_list
+            return sorted(data_list, key=lambda x: x['date'])
         
         except:print('해당 날짜가 존재하지 않음둥')
 
-
-exchange()

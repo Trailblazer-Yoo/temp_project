@@ -173,7 +173,7 @@ class Interest_Crawling():
         print(country) # 한국 나오면 끝
         driver.quit()  #탭 닫기
         
-        return data
+        return sorted(data, key=lambda x: x['date']) 
     
     def update(self, i, last_date):
         print('업데이트를 진행합니다.')
@@ -269,5 +269,5 @@ class Interest_Crawling():
             temp = {'date' : d, f'interest{condition}Y' : float(td[1].text), f'change{condition}Y' : float(td[5].text.replace('%','').replace(',',''))} # 날짜, 종가, 시가, 고가, 저가, 변화율(%)
             data.append(temp)
         
-        return data   
+        return sorted(data, key=lambda x: x['date'])   
     
