@@ -30,7 +30,7 @@ class exchange():
         driver.get('https://google.com')
         driver.maximize_window()
         driver.execute_script('window.open("https://spot.wooribank.com/pot/Dream?withyou=FXXRT0014");')
-        time.sleep(3)
+        time.sleep(10)
 
         driver.switch_to.window(driver.window_handles[-1])
 
@@ -61,18 +61,18 @@ class exchange():
         time.sleep(30)
 
         # country_name = driver.find_element_by_xpath('//*[@id="fxprint"]/div/div/dl/dd[2]').text # 국가명 추출
-        try:
-            table = driver.find_element_by_xpath('//*[@id="fxprint"]/table/tbody') # 테이블 접근
-            rows = table.find_elements_by_tag_name("tr") # 테이블의 각 행에 접근
-        
-            data_list = []
-            for tr in rows:
+        table = driver.find_element_by_xpath('//*[@id="fxprint"]/table/tbody') # 테이블 접근
+        rows = table.find_elements_by_tag_name("tr") # 테이블의 각 행에 접근
+    
+        data_list = []
+        for tr in rows:
+            try:
                 td = tr.find_elements_by_tag_name("td") # td 전체 찾기
                 data = {'date' : td[0].text.replace('.', '-') , 'buy' : float(td[3].text.replace(',','')), 'standard' : float(td[6].text.replace(',',''))}
                 data_list.append(data)
-            driver.quit()
-            
-            return sorted(data_list, key=lambda x: x['date'])
+            except:pass
+        driver.quit()
         
-        except:print('해당 날짜가 존재하지 않음둥')
+        return sorted(data_list, key=lambda x: x['date'])
+        
 

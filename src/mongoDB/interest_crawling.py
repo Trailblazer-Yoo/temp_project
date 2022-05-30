@@ -39,10 +39,16 @@ class Interest_Crawling():
         self.db = self.client['exchange']
         
         dt = self.date()  # 환율 데이터 경로(날짜 가져오기) ## 한국은 환율 데이터가 없으므로 인덱스 맞춰주기
-        self.date_storage = dt + [min(dt), min(dt)]
+        try:
+            self.date_storage = dt + ['2003-01-01', '2003-01-01']
+        except:
+            print('아직 환율 데이터 크롤링이 완료되지 않았습니다.')
         
     def date(self):
-        return [list(self.db[country].find().skip(self.db[country].count_documents({})-1))[0]['date'] for country in mongo_name]
+        try:
+            return [self.db[country].find_one()['date'] for country in mongo_name]
+        except:
+            print('환율 데이터를 업데이트 해주시기 바랍니다.')
     
     def initiate(self, i):
         print('데이터를 생성합니다.')
@@ -129,7 +135,9 @@ class Interest_Crawling():
         tbody = driver.find_element_by_id('curr_table') # 환율 데이터 테이블 접근
         table = tbody.find_element_by_tag_name('tbody')
         rows = table.find_elements_by_tag_name("tr") # 테이블의 각 행에 접근
-        
+        try:
+            driver.find_element_by_class_name('popupCloseIcon.largeBannerCloser').click() # 광고 배너 닫기
+        except:pass
         data1 = []
         for tr in rows:
             td = tr.find_elements_by_tag_name("td") # 모든 열 찾기
@@ -160,6 +168,9 @@ class Interest_Crawling():
         tbody = driver.find_element_by_id('curr_table') # 환율 데이터 테이블 접근
         table = tbody.find_element_by_tag_name('tbody')
         rows = table.find_elements_by_tag_name("tr") # 테이블의 각 행에 접근
+        try:
+            driver.find_element_by_class_name('popupCloseIcon.largeBannerCloser').click() # 광고 배너 닫기
+        except:pass
         data2 = []
         for tr in rows:
             td = tr.find_elements_by_tag_name("td") # 모든 열 찾기
@@ -261,7 +272,9 @@ class Interest_Crawling():
         tbody = driver.find_element_by_id('curr_table') # 환율 데이터 테이블 접근
         table = tbody.find_element_by_tag_name('tbody')
         rows = table.find_elements_by_tag_name("tr") # 테이블의 각 행에 접근
-        
+        try:
+            driver.find_element_by_class_name('popupCloseIcon.largeBannerCloser').click() # 광고 배너 닫기
+        except:pass
         data = []
         for tr in rows:
             td = tr.find_elements_by_tag_name("td") # 모든 열 찾기
