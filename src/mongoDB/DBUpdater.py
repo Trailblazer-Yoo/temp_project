@@ -102,8 +102,7 @@ class DBUpdater_ex():
             
     def interest_autoupdate(self):
         mongo_name = self.mongo_name + ['Korea1Y', 'Korea2Y']
-        for i, country in enumerate(mongo_name[32:]):
-            i = i + 32
+        for i, country in enumerate(mongo_name):
             print("크롤링을 진행할 국가 :", country)
             coll = self.make_DB('interest', country)
             if not coll.find_one():
@@ -116,6 +115,7 @@ class DBUpdater_ex():
                 self.client['interest'].drop_collection(country)
             else:
                 coll.insert_many(insert_data)
+                print('데이터 갯수는 ', coll.count_documents({}), '개임둥!')
                 print(f'{i}번째 {country} 국가 완료')
 
         

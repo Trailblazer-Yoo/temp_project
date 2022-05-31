@@ -57,7 +57,7 @@ class Interest_Crawling():
         driver.get('https://google.com') # 구글 창 열기
         driver.maximize_window() # 창 모니터 크기에 맞춰 최대화
 
-        if i < 39:
+        if i < 38:
             if investing_countries_1Y[i] != None:
                 country = investing_countries_1Y[i]
                 url = f'https://www.investing.com/rates-bonds/{country}-1-year-bond-yield-historical-data' # 1년물 채권 사이트
@@ -70,10 +70,10 @@ class Interest_Crawling():
                 return
         else: # 한국 1년 & 2년물
             country = 'south-korea'
-            if i == 39:
+            if i == 38:
                 url = 'https://www.investing.com/rates-bonds/south-korea-1-year-bond-yield-historical-data'
                 condition = 1
-            elif i == 40:
+            elif i == 39:
                 url = 'https://www.investing.com/rates-bonds/south-korea-2-year-bond-yield-historical-data'
                 condition = 2
         

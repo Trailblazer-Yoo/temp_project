@@ -20,30 +20,24 @@ ac.move_to_element(input).click().send_keys_to_element(input, 'Hawaii 맛집').s
 time.sleep(5)
 
 href_list = []
+ac.move_by_offset(225,630).perform()
 while True:
     try:
-        scroll = driver.find_element_by_class_name('m6QErb.DxyBCb.kA9KIf.dS8AEf.ecceSd')
-        # scroll = driver.find_element_by_css_selector('focus:.scrollable.focus;.blur:.scrollable.blur')
-        ac.move_to_element(to_element=scroll).send_keys_to_element(scroll,Keys.PAGE_DOWN).perform()
-        time.sleep(3)
-        changed_scroll = driver.find_element_by_class_name('m6QErb.DxyBCb.kA9KIf.dS8AEf.ecceSd.QjC7t')
-        ac.move_to_element(to_element=changed_scroll
-                           ).send_keys_to_element(changed_scroll,Keys.PAGE_DOWN
-                           ).send_keys_to_element(changed_scroll,Keys.PAGE_DOWN
-                           ).send_keys_to_element(changed_scroll,Keys.PAGE_DOWN
-                           ).send_keys_to_element(changed_scroll,Keys.PAGE_DOWN
-                           ).send_keys_to_element(changed_scroll,Keys.PAGE_DOWN
-                           ).perform()
-
-        time.sleep(3)
+        print('스크롤 내린다.')
+        ac.click_and_hold().perform()
+        print('스크롤 다 내렸다.')
+        time.sleep(6)
+        print('리스트 가져온다')
         google_list = driver.find_elements_by_class_name('hfpxzc')
         for a_tag in google_list:
             href_list.append(a_tag.get_attribute('href'))
         time.sleep(1)
-
+        print('버튼 누른다.')
         next_button = driver.find_elements_by_class_name('hV1iCc.Hk4XGb')[-1]
-        ac.move_to_element(to_element=next_button).click().perform()
-        time.sleep(3)
+        next_button.click()
+        print('버튼 눌렀다,')
+        time.sleep(10)
+        print('기다린다')
     except:break
 print(href_list)
 
