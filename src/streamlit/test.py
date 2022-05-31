@@ -1,3 +1,5 @@
+import re
+
 region_dict = {'오스트레일리아': ['시드니', '멜버른', '태즈메이니아', '브리즈번', '골드코스트', '애들레이드', '캔버라', '퍼스', '케언즈', '울런공', '앨리스 스프링스', '아폴로베이', '해밀턴 아일랜드', '율라라'],
                 '바레인' : ['바레인'],
                 '브라질' : ['리우데자네이루', '파라티', '포스두이구아수', '보니또'],
@@ -36,3 +38,33 @@ region_dict = {'오스트레일리아': ['시드니', '멜버른', '태즈메이
                 '미국' : ['괌', '뉴욕','하와이','라스베이거스','샌프란시스코','로스앤젤레스'], 
                 '베트남' : ['호찌민','호이안','하노이','다낭','나트랑','후에','푸꾸옥','달랏','사파','닌빈','하롱']}
 print(list(region_dict.keys()))
+
+a = '''[
+  {
+    "Terr_code": "DG",
+    "State_Name": "GHANA",
+    "ICAO_Code": "DGAA",
+    "AFTN": "",
+    "Location_Name": "ACCRA/KOTOKA INTERNATIONAL",
+    "Lat": "05:36:16N",
+    "Long": "000:10:03W",
+    "Latitude": "5.60441388888889",
+    "Longitude": "-0.167544444444444",
+    "codcoun": "DGGhana",
+    "IATA_Code": "ACC",
+    "ctry_code": "GHA"
+  }
+]'''
+
+b = a.replace(' ', '').replace('\n', '').replace('[','').replace(']','')
+b = b.split(',')
+k = {}
+for i in b:
+    q = i.replace('{', '').replace('"', '').split(':')
+    try:
+        k[q[0]] = float(q[1])
+    except:
+        k[q[0]] = q[1]
+        
+
+print(k, type(k), len(k))

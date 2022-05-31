@@ -56,10 +56,15 @@ ex = exchange()
 data = ex.crawling('USD(미국)')
 print(data)
 
-host = '35.78.27.97'
-port = '27017'
-client = MongoClient(f'mongodb://{host}:{port}')  # mongoDB는 27017 포트로 들어가서 aws의 DB 와 연결해준다.
-print(client.list_database_names()) # 현재 데이터베이스 목록 출력
-db = client['exchange']
+client = MongoClient('localhost', 27017)
+db = client['test']
+coll = db['test1']
+coll.insert_many(data)
+
+# host = '35.78.27.97'
+# port = '27017'
+# client1 = MongoClient(f'mongodb://{host}:{port}')  # mongoDB는 27017 포트로 들어가서 aws의 DB 와 연결해준다.
+# print(client1.list_database_names()) # 현재 데이터베이스 목록 출력
+# db = client1['exchange']
 
 
