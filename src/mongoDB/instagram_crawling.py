@@ -29,16 +29,16 @@ text_bar = driver.find_element_by_class_name('XTCLo.d_djL.DljaH') # 상단 입�
 ac.move_to_element(to_element=text_bar).click().perform()
 ac.move_to_element(to_element=text_bar).send_keys('#도쿄맛집').perform()
 time.sleep(3)
-visible_text_bar = driver.find_element_by_class_name('XTCLo.d_djL.DljaH.focus-visible')
+visible_text_bar = driver.find_element_by_xpath()
 ac.move_to_element(to_element=visible_text_bar).click().send_keys(Keys.ENTER).perform()
 
 time.sleep(5)
 
-bs_obj = BeautifulStoneSoup(driver.page_source)
-post_obj = bs_obj.find_all('div', {'class': 'v1Nh3 kIKUG _bz0w'}) # 모든 게시물 파싱
+# bs_obj = BeautifulStoneSoup(driver.page_source)
+# post_obj = bs_obj.find_all('div', {'class': 'v1Nh3 kIKUG _bz0w'}) # 모든 게시물 파싱
 
-for post in post_obj:
-    print(post.find('a'))
+# for post in post_obj:
+#     print(post.find('a'))
     
 
 
