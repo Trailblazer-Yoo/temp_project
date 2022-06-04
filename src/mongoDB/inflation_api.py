@@ -12,7 +12,7 @@ imf_REF_AREA = ['AU', 'BH', 'BR', 'BN', 'KH', 'CA', 'HK', 'CN', 'CZ', 'DK', 'U2'
 base_url = 'http://dataservices.imf.org/REST/SDMX_JSON.svc/CompactData/IFS/'
 
          # 통화량(계절조정) ,   국제 통화량(금 제외), 산업지수, 산업지수(계절조정), 물가 지수, 물가변화율(계절조정)
-series = [ 'RAXG_USD', 'AIP_IX', 'PCPI_IX', 'PCPI_PC_PP_PT']
+series = ['RAXG_USD', 'AIP_IX', 'PCPI_IX', 'PCPI_PC_PP_PT']
 
 key = f'M.CA.PCPI_PC_PP_PT' # adjust codes here
 r = requests.get(f'{base_url}{key}').json()
