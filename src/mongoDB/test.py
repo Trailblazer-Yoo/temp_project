@@ -1,18 +1,19 @@
-from pymongo import MongoClient
+import schedule
+import time
 
-host = '35.78.27.97'
-port = '27017'
-client_aws = MongoClient(f'mongodb://{host}:{port}')  # mongoDB는 27017 포트로 들어가서 aws의 DB 와 연결해준다.
-client = MongoClient('localhost', 27017)
-db = client['exchange']
-db_aws = client_aws['exchange']
-print(client_aws.list_database_names())
-print(db.list_collection_names())
-for country in db.list_collection_names():
-    print(country)
-    data = list(db[country].find({}))
-    db_aws[country].insert_many(data)
-print(db_aws.list_collection_names())
+# step2.실행할 함수 선언
+class Interest_Crawling():
+    def __init__(self):
+        host = '35.78.27.97'
+        port = '27017'
+    def message(self):
+        print("스케쥴 실행중...")
 
 
+# step3.실행 주기 설정
+schedule.every().monday.at("17:00").do(lambda: Interest_Crawling().message())
 
+# step4.스캐쥴 시작
+while True:
+    schedule.run_pending()
+    time.sleep(1)

@@ -1,5 +1,7 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from pymongo import MongoClient
+import time
+import schedule
 import pandas as pd
 from exchange_crawling import exchange
 from interest_crawling import Interest_Crawling
@@ -59,46 +61,37 @@ class DBUpdater_ex():
     
     def exchange_autoupdate(self):
         print('오늘은', f'{date_Dict[datetime.now().date().weekday()]}입니다.')
-        if int(datetime.now().date().weekday()) < 5:
-            print('은행 영업 마감 시간은 3시 30분이므로 크롤링은 그 이후에 진행하실 수 있습니다.')
-            print('현재 시간은 ', f'{datetime.now().hour}시', f'{datetime.now().minute}분입니다.')
-            try :
-                if int(datetime.now().hour) == 15 and int(datetime.now().minute) > 30 or int(datetime.now().hour) > 15:
-                    print('따라서 크롤링을 진행합니다.')
-                    # 데이터베이스 생성
-                    print("현재 존재하는 데이터베이스 이름 : ",self.client.list_database_names()) # 사용중인 모든 데이터베이스를 출력
-                    print('현재 존재하는 DB의 Collection 목록 : ', self.client['exchange'].list_collection_names())
-                    
-                    for i, country in enumerate(self.mongo_name):
-                        if country == 'Korea':
-                            return
-                        coll = self.make_DB('exchange', country)
-                        print(coll.find_one())
-                        print("크롤링을 진행할 국가 : ", country)
-                        if not coll.find_one():
-                            print('크롤링을 진행하지 않았으므로 처음부터 크롤링을 진행함둥!')
-                            insert_data = self.ex.country(self.exchange_countries[i])
-                            coll.insert_many(insert_data)
-                            print(country, '완료됐슴둥!')
-                            print('데이터 갯수는 ', coll.count_documents({}), '개임둥!')
-                        else: # 최근 날짜까지 업데애트
-                            last_date = list(coll.find())[-1]
-                            print(last_date)
-                            if last_date != str(datetime.now().date()):
-                                print('DB 날짜와 현재 날짜가 언~발란스한 상황')
-                                date = last_date
-                                insert_data = self.ex.country(self.exchange_countries[i],date)
-                                coll.insert_many(insert_data)
-                                print(country, '완료됐슴둥!')
-                                print('데이터 갯수는', coll.count_documents({}), '개임둥!')
-                            elif last_date == datetime.now().date():
-                                print('이미 업데이트해놨지롱~')
-                else:
-                    raise
-            except:
-                print('크롤링 가능한 시간까지', f'{14-int(int(datetime.now().hour))}시간', f'{60-int(datetime.now().minute)}분 남았습니다.')
-        else:
-            print('주말에는 은행이 영업하지 않으므로 새로 업데이트할 데이터가 없습니다.')
+        # 데이터베이스 생성
+        print("현재 존재하는 데이터베이스 이름 : ",self.client.list_database_names()) # 사용중인 모든 데이터베이스를 출력
+        print('현재 존재하는 DB의 Collection 목록 : ', self.client['exchange'].list_collection_names())
+        
+        for i, country in enumerate(self.mongo_name):
+            if country == 'Korea':
+                return
+            coll = self.make_DB('exchange', country)
+            print(coll.find_one())
+            print("크롤링을 진행할 국가 : ", country)
+            if not coll.find_one():
+                print('크롤링을 진행하지 않았으므로 처음부터 크롤링을 진행함둥!')
+                insert_data = self.ex.country(self.exchange_countries[i])
+                coll.insert_many(insert_data)
+                print(country, '완료됐슴둥!')
+                print('데이터 갯수는 ', coll.count_documents({}), '개임둥!')
+            else: # 최근 날짜까지 업데애트
+                last_date = datetime.strptime(list(coll.find())[-1]['date'], "%Y-%m-%d")
+                last_date = last_date + timedelta(days=1)
+                last_date = last_date.strftime('%Y-%m-%d')
+                if last_date != str(datetime.now().date()):
+                    print('DB 날짜와 현재 날짜가 언~발란스한 상황')
+                    print(last_date)
+                    try:
+                        insert_data = self.ex.country(self.exchange_countries[i],last_date)
+                        coll.insert_many(insert_data)
+                        print(country, '완료됐슴둥!')
+                        print('데이터 갯수는', coll.count_documents({}), '개임둥!')
+                    except:
+                        print('휴일입니다')
+
             
     def interest_autoupdate(self):
         mongo_name = self.mongo_name + ['Korea1Y', 'Korea2Y']
@@ -108,16 +101,51 @@ class DBUpdater_ex():
             if not coll.find_one():
                 insert_data = self.int.initiate(i)
             else:
-                last_date = list(coll.find())[-1]
+                last_date = datetime.strptime(list(coll.find())[-1]['date'], "%Y-%m-%d")
+                last_date = last_date - timedelta(days=1)
+                last_date = last_date.strftime('%Y-%m-%d')
                 print(last_date)
-                insert_data = self.int.update(i, last_date)
-            if not insert_data:
-                self.client['interest'].drop_collection(country)
-            else:
-                coll.insert_many(insert_data)
-                print('데이터 갯수는 ', coll.count_documents({}), '개임둥!')
-                print(f'{i}번째 {country} 국가 완료')
+                try:
+                    insert_data = self.int.update(i, last_date)
+                    for data in insert_data:
+                        coll.update_one({'date' : data['date']}, {"$set" : data})
+                    print('데이터 갯수는 ', coll.count_documents({}), '개임둥!')
+                    print(f'{i}번째 {country} 국가 완료')
+                except:print('업데이트할 데이터가 없음')
 
+    def preprocessing(self):
+        mongo_name = self.mongo_name + ['Korea1Y', 'Korea2Y']
+        for i, country in enumerate(mongo_name):
+            coll = self.make_DB('interest', country)
+            data_dict = list(coll.find({}, {'_id' : 0}))
+            keys_ori = list(data_dict[0].keys())
+            print(keys_ori)
+            for i, row in enumerate(data_dict):
+                keys_list = list(row.keys())
+                try:
+                    keys_list[1]
+                except:
+                    insert = list(coll.find({'date' : {'$regex' : data_dict[i-1]['date']}}))
+                    print(insert)
+                    coll.update_one({'date' : row['date']}, {"$set" : {keys_ori[1] : insert[0][keys_ori[1]], keys_ori[2] : insert[0][keys_ori[2]]}})
+    def make_date(self):
+        mongo_name = self.mongo_name + ['Korea1Y', 'Korea2Y']
+        for i, country in enumerate(mongo_name):
+            coll = self.make_DB('interest', country)
+            coll.insert_one({'date' : datetime.today().strftime('%Y-%m-%d')})
+            
         
 mg = DBUpdater_ex()
-mg.interest_autoupdate()
+# step3.실행 주기 설정
+schedule.every().monday.at("17:00").do(mg.exchange_autoupdate())
+schedule.every().tuesday.at("17:00").do(mg.exchange_autoupdate())
+schedule.every().wednesday.at("17:00").do(mg.exchange_autoupdate())
+schedule.every().thursday.at("17:00").do(mg.exchange_autoupdate())
+schedule.every().friday.at("17:00").do(mg.exchange_autoupdate())
+schedule.every().day.at("16:00").do(mg.interest_autoupdate())
+schedule.every().monday.at("16:30").do(mg.preprocessing())
+
+# step4.스캐쥴 시작
+while True:
+    schedule.run_pending()
+    time.sleep(1)
