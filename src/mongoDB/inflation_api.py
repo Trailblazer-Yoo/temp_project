@@ -17,11 +17,11 @@ base_url = 'http://dataservices.imf.org/REST/SDMX_JSON.svc/CompactData/IFS/'
 series = ['AIP_IX', 'PCPI_IX', 'FIR_PA','RAXG_USD', 'ENSE_XDC_XDR_RATE']
 name = ['산업지수', '물가상승률', '기준금리', '국제통화량', '실질환율']
 
-cp = pd.read_csv('Crude_Oil_WTI_Futures_Historical_Data.csv')
-key = f'M.US.AIP_IX' # adjust codes here
+# cp = pd.read_csv('Crude_Oil_WTI_Futures_Historical_Data.csv')
+key = f'M.CA.PCPI_IX' # adjust codes here
 r = requests.get(f'{base_url}{key}').json()
-# imf_dict = r['CompactData']['DataSet']['Series']['Obs']
-# print(imf_dict)
+imf_dict = r['CompactData']['DataSet']['Series']['Obs']
+print(imf_dict)
 
 
 for country in imf_REF_AREA:
