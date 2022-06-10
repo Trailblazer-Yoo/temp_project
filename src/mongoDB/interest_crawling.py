@@ -18,17 +18,17 @@ investing_countries = ['australia', 'bahrain','brazil', None, None, 'canada', 'h
                 'norway', 'philippines', 'poland', 'russia', None, 'singapore', 'south-africa',
                 None, 'switzerland', 'taiwan', 'thailand', 'turkey', None, 'uk', 'u.s.', 'vietnam', 'south-korea']
 
-investing_countries_1Y = ['australia', 'bahrain','brazil', None, None, 'canada', 'hong-kong',
+investing_countries_1Y = ['australia', None,'brazil', None, None, 'canada', 'hong-kong',
                 'china', 'czech-republic', None, 'germany', None, 'hungary', 'india', 'indonesia', 'israel',
-                 'japan', 'jordan', None, 'malaysia', 'mexico', None,
+                 'japan', None, None, 'malaysia', 'mexico', None,
                 'norway', 'philippines', 'poland', 'russia', None, 'singapore', None,
-                None, 'switzerland', None, 'thailand', 'turkey', None, 'uk', 'u.s.', 'vietnam', 'south-korea']
+                None, 'switzerland', None, 'thailand', 'turkey', None, 'uk', None, 'vietnam', 'south-korea']
 
 investing_countries_2Y = [None, None, None, None, None, None, None,
                 None, None, None, None, None, None, None, None, None,
                  None, None, None, None, None, 'new-zealand',
                 None, None, None, None, None, None, 'south-africa',
-                None, None, 'taiwan', None, None, None, None, None, None, 'south-korea']
+                None, None, 'taiwan', None, None, None, None, 'u.s.', None, 'south-korea']
 
 imf_REF_AREA = ['AU', 'BH', 'BR', 'BN', 'KH', 'CA', 'HK', 'CN', 'CZ', 'DK', 'U2', 'FJ', 'HU', 'IN', 'ID', 'IL', 'JP', 'JO', 'KW', 'MY',
                 'MX', 'NZ', 'NO', 'PH', 'PL', 'RU', 'SA', 'SG', 'ZA', 'SE', 'CH', 'TW', 'TH', 'TR', 'AE', 'GB', 'US', 'VN', 'KR']

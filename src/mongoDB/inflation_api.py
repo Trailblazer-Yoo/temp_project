@@ -18,23 +18,23 @@ series = ['AIP_IX', 'PCPI_IX', 'FIR_PA','RAXG_USD', 'ENSE_XDC_XDR_RATE']
 name = ['산업지수', '물가상승률', '기준금리', '국제통화량', '실질환율']
 
 # cp = pd.read_csv('Crude_Oil_WTI_Futures_Historical_Data.csv')
-key = f'M.CA.PCPI_IX' # adjust codes here
+key = f'M.UK.PCPI_IX' # adjust codes here
 r = requests.get(f'{base_url}{key}').json()
 imf_dict = r['CompactData']['DataSet']['Series']['Obs']
 print(imf_dict)
 
 
-for country in imf_REF_AREA:
-    print(mongo_name[imf_REF_AREA.index(country)])
-    for k in series:
-        for date in ['M', 'Q', 'Y']:
-            try:
-                key = f'{date}.{country}.{k}' # adjust codes here
-                r = requests.get(f'{base_url}{key}').json()
-                imf_dict = r['CompactData']['DataSet']['Series']['Obs']
-                print(date, name[series.index(k)],'데이터 :',imf_dict[0]['@TIME_PERIOD'],'부터', imf_dict[-1]['@TIME_PERIOD'], '까지')
-            except:
-                print(date, name[series.index(k)], '데이터 없음')
-imf_df = pd.DataFrame(imf_dict)
-imf_df.columns = ['date', 'inflation']
-imf_dict = imf_df.to_dict('record')
+# for country in imf_REF_AREA:
+#     print(mongo_name[imf_REF_AREA.index(country)])
+#     for k in series:
+#         for date in ['M', 'Q', 'Y']:
+#             try:
+#                 key = f'{date}.{country}.{k}' # adjust codes here
+#                 r = requests.get(f'{base_url}{key}').json()
+#                 imf_dict = r['CompactData']['DataSet']['Series']['Obs']
+#                 print(date, name[series.index(k)],'데이터 :',imf_dict[0]['@TIME_PERIOD'],'부터', imf_dict[-1]['@TIME_PERIOD'], '까지')
+#             except:
+#                 print(date, name[series.index(k)], '데이터 없음')
+# imf_df = pd.DataFrame(imf_dict)
+# imf_df.columns = ['date', 'inflation']
+# imf_dict = imf_df.to_dict('record')

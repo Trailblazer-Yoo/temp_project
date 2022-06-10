@@ -1,4 +1,5 @@
 import re
+import pandas as pd
 
 region_dict = {'오스트레일리아': ['시드니', '멜버른', '태즈메이니아', '브리즈번', '골드코스트', '애들레이드', '캔버라', '퍼스', '케언즈', '울런공', '앨리스 스프링스', '아폴로베이', '해밀턴 아일랜드', '율라라'],
                 '바레인' : ['바레인'],
@@ -56,15 +57,18 @@ a = '''[
   }
 ]'''
 
-b = a.replace(' ', '').replace('\n', '').replace('[','').replace(']','')
-b = b.split(',')
-k = {}
-for i in b:
-    q = i.replace('{', '').replace('"', '').split(':')
-    try:
-        k[q[0]] = float(q[1])
-    except:
-        k[q[0]] = q[1]
+# b = a.replace(' ', '').replace('\n', '').replace('[','').replace(']','')
+# b = b.split(',')
+# k = {}
+# for i in b:
+#     q = i.replace('{', '').replace('"', '').split(':')
+#     try:
+#         k[q[0]] = float(q[1])
+#     except:
+#         k[q[0]] = q[1]
         
 
-print(k, type(k), len(k))
+# print(k, type(k), len(k))
+
+a = pd.DataFrame({'date' : '2022-05-20', 'buy' : 20, 'sell':40}, columns = ['date', 'buy', 'sell'])
+print(a)
